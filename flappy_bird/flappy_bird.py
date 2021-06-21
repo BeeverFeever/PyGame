@@ -37,7 +37,7 @@ bird_surface = py.image.load('flappy_bird/assets/bluebird-midflap.png')
 bird_surface = py.transform.scale2x(bird_surface)
 bird_rect = bird_surface.get_rect(center = (100, 512))
 
-pipe_surface = py.image.load('flappy_bird/assests/pipe-red.png')
+pipe_surface = py.image.load('flappy_bird/assets/pipe-red.png')
 pipe_surface = py.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = py.USEREVENT
@@ -48,7 +48,7 @@ while True:
         if event.type == py.QUIT:
             py.quit()
             sys.exit()
-                    
+
         if event.type == py.KEYDOWN:
             if event.key == py.K_SPACE:
                 bird_movement = 0
