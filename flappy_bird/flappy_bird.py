@@ -9,6 +9,14 @@ def draw_floor():
     screen.blit(floor_surface, (floor_x_pos, 900))
     screen.blit(floor_surface, (floor_x_pos + 576, 900))
 
+def create_pipe():
+    new_pipe = pipe_surface.get_rect(midtop = (288, 512))
+    return new_pipe
+
+def move_pipes(pipes):
+    for pipe in pipes:
+        pipe.centerx -= 5
+
 
 py.init()
 screen = py.display.set_mode((576, 1024))
@@ -29,16 +37,26 @@ bird_surface = py.image.load('flappy_bird/assets/bluebird-midflap.png')
 bird_surface = py.transform.scale2x(bird_surface)
 bird_rect = bird_surface.get_rect(center = (100, 512))
 
+pipe_surface = py.image.load('flappy_bird/assests/pipe-red.png')
+pipe_surface = py.transform.scale2x(pipe_surface)
+pipe_list = []
+SPAWNPIPE = py.USEREVENT
+py.time.set_timer(SPAWNPIPE, 1200)
 
 while True:
     for event in py.event.get():
         if event.type == py.QUIT:
             py.quit()
             sys.exit()
+                    
         if event.type == py.KEYDOWN:
             if event.key == py.K_SPACE:
                 bird_movement = 0
                 bird_movement -= 6
+
+        if event.type == SPAWNPIPE:
+            pipe_list.append(create_pipe())
+
     
     screen.blit(bg_surface, (0, 0))
 
