@@ -19,6 +19,8 @@ CYAN = (0, 255, 255)
 ball_speed_x = 7
 ball_speed_y = 7
 
+paddle_speed = 0
+
 # set up window
 wn_width = 1000
 wn_height = 650
@@ -41,6 +43,25 @@ def BallMovement():
     if ball.colliderect(left_paddle) or ball.colliderect(right_paddle): 
         ball_speed_x *= -1
 
+def LeftPaddleMovement():
+    left_paddle.y += paddle_speed
+    if left_paddle.top <= 0:
+        left_paddle.top = 0
+    if left_paddle.bottom >= wn_height:
+        left_paddle.bottom = wn_height
+
+def RigthPaddleMovement():
+    if right_paddle.top <= ball.top:
+        right_paddle.y += paddle_speed
+    if right_paddle.bottom >= ball.bottom:
+        right_paddle.y -= paddle_speed 
+        
+    if right_paddle.top <= 0:
+        right_paddle.top = 0
+    if right_paddle.bottom >= wn_height:
+        right_paddle.bottom = wn_height
+    
+
 def DrawShapes():
     py.draw.rect(screen, GREEN, left_paddle)
     py.draw.rect(screen, GREEN, right_paddle)
@@ -52,11 +73,23 @@ while True:
         if event.type == py.QUIT:
             py.quit()
             sys.exit()
+        if event.type == py.KEYDOWN:
+            if event.key == py.K_DOWN:
+                paddle_speed += 7
+            if event.key == py.K_UP:
+                paddle_speed -= 7
+        if event.type == py.KEYUP:
+            if event.key == py.K_DOWN:
+                paddle_speed -= 7
+            if event.key == py.K_UP:
+                paddle_speed += 7
 
     screen.fill(GREY)
 
     BallMovement()
     DrawShapes()
+    LeftPaddleMovement()
+    RigthPaddleMovement()
 
     ball.x += ball_speed_x
     ball.y += ball_speed_y
