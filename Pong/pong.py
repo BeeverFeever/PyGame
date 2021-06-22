@@ -2,6 +2,7 @@ import pygame as py
 import sys
 import math
 from pygame.locals import *
+import random
 
 # inititalisation
 py.init()
@@ -19,7 +20,8 @@ CYAN = (0, 255, 255)
 ball_speed_x = 7
 ball_speed_y = 7
 
-paddle_speed = 0
+left_paddle_speed = 0
+right_paddle_speed = 5
 
 # set up window
 wn_width = 1000
@@ -37,25 +39,25 @@ def BallMovement():
     global ball_speed_x, ball_speed_y
 
     if ball.left <= 0 or ball.right >= wn_width:
-        ball_speed_x *= -1
+        BallRestart()
     if ball.top <= 0 or ball.bottom >= wn_height:
         ball_speed_y *= -1
     if ball.colliderect(left_paddle) or ball.colliderect(right_paddle): 
         ball_speed_x *= -1
 
 def LeftPaddleMovement():
-    left_paddle.y += paddle_speed
+    left_paddle.y += left_paddle_speed
     if left_paddle.top <= 0:
         left_paddle.top = 0
     if left_paddle.bottom >= wn_height:
         left_paddle.bottom = wn_height
 
 def RigthPaddleMovement():
-    if right_paddle.top <= ball.top:
-        right_paddle.y += paddle_speed
-    if right_paddle.bottom >= ball.bottom:
-        right_paddle.y -= paddle_speed 
-        
+    if right_paddle.top < ball.y:
+        right_paddle.top += right_paddle_speed
+    if right_paddle.top > ball.y:
+        right_paddle.top -= right_paddle_speed
+
     if right_paddle.top <= 0:
         right_paddle.top = 0
     if right_paddle.bottom >= wn_height:
@@ -66,6 +68,10 @@ def DrawShapes():
     py.draw.rect(screen, GREEN, left_paddle)
     py.draw.rect(screen, GREEN, right_paddle)
     py.draw.ellipse(screen, GREEN, ball)
+    py.draw.aaline(screen, GREEN, (wn_width / 2, 0), (wn_width / 2, wn_height))
+
+def BallRestart():
+    ball.center = (wn_width / 2, wn_height / 2)
 
 # game loop
 while True:
@@ -75,19 +81,19 @@ while True:
             sys.exit()
         if event.type == py.KEYDOWN:
             if event.key == py.K_DOWN:
-                paddle_speed += 7
+                left_paddle_speed += 7
             if event.key == py.K_UP:
-                paddle_speed -= 7
+                left_paddle_speed -= 7
         if event.type == py.KEYUP:
             if event.key == py.K_DOWN:
-                paddle_speed -= 7
+                left_paddle_speed -= 7
             if event.key == py.K_UP:
-                paddle_speed += 7
+                left_paddle_speed += 7
 
     screen.fill(GREY)
 
-    BallMovement()
     DrawShapes()
+    BallMovement()
     LeftPaddleMovement()
     RigthPaddleMovement()
 
